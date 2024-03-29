@@ -6,7 +6,7 @@ export default function TrackSearchResult({ track, chooseTrack }) {
         chooseTrack(track)
     }
   return (
-    <div className='flex m-2 items-center cursor-pointer' onClick={handlePlay}>
+    <div className='flex my-7 items-center cursor-pointer' onClick={handlePlay}>
         <img src={track.albumUrl} style={{height: '64px', width: "64px "}} />
         <div className='ml-3'>
             <div className='text-gray-50'> {track.title} </div>
