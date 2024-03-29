@@ -3,6 +3,7 @@ import useAuth from './useAuth';
 import spotifyWebAPI from "spotify-web-api-node"
 import TrackSearchResult from './TrackSearchResult';
 import Player from './Player';
+import axios from 'axios';
 
 const spotifyAPI = new spotifyWebAPI({
   clientId: "54e5b4cb03eb42e698440d6e51b7e35e"
@@ -13,11 +14,32 @@ export default function Dashboard({ code }) {
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [playingTrack, setPlayingTrack] = useState();
+  const [lyrics, setLyrics] = useState("")
 
   function chooseTrack(track) {
     setPlayingTrack(track)
     setSearch('')
+    setLyrics("")
   }
+
+  useEffect(() => {
+    if (!playingTrack) return;
+  
+    axios
+      .get("http://localhost:3001/lyrics", {
+        params: {
+          track: playingTrack.title,
+          artist: playingTrack.artist
+        },
+      })
+      .then(res => {
+        setLyrics(res.data.lyrics || "No lyrics found");
+      })
+      .catch((error) => {
+        console.error("Error fetching lyrics:", error);
+        setLyrics("Error fetching lyrics");
+      });
+  }, [playingTrack]);
 
   useEffect (() => {
     if (!accessToken) return
@@ -60,6 +82,13 @@ export default function Dashboard({ code }) {
         {searchResults.map(track => (
           <TrackSearchResult track={track} key={track.uri} chooseTrack={chooseTrack} />
         ))}
+
+        {searchResults.length === 0 && (
+          <div className='text-center whitespace-pre'>
+            { lyrics }
+          </div>
+        )}
+        
       </div>
 
       <div>
