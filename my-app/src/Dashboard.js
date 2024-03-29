@@ -74,11 +74,17 @@ export default function Dashboard({ code }) {
 
   return ( 
     <div className='flex flex-col justify-start items-center h-screen p-5'>
-      <form className="w-full max-w-xs">
-        <input type="search" placeholder="Search Songs/Artists" className="input input-bordered input-success w-full" value={search} onChange={e => setSearch(e.target.value)} />
+      <form className="relative">
+          <input 
+              type="search" 
+              placeholder="Search Songs/Artists" 
+              className="w-[700px] py-2 px-4 rounded-lg bg-gray-100 text-gray-800 border border-gray-300 focus:outline-none focus:border-blue-500 transition-colors duration-300 ease-in-out" 
+              value={search} 
+              onChange={e => setSearch(e.target.value)} 
+          />
       </form>
 
-      <div className='flex-grow my-2' style={{ overflowY: "auto" }}>
+      <div className='flex-grow my-2 overflow-y-auto'>
         {searchResults.map(track => (
           <TrackSearchResult track={track} key={track.uri} chooseTrack={chooseTrack} />
         ))}
@@ -88,7 +94,6 @@ export default function Dashboard({ code }) {
             { lyrics }
           </div>
         )}
-        
       </div>
 
       <div>
